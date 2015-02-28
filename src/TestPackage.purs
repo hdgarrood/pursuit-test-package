@@ -3,7 +3,9 @@ module TestPackage (
   ExportedCtors(..),
   exportedFn,
   dataWithDocs,
-  withoutTypeSig
+  withoutTypeSig,
+  (<++>),
+  Thingy, thingy
  ) where
 
 data NoExportedCtors
@@ -19,7 +21,7 @@ exportedFn :: String -> String
 exportedFn = nonExportedFn
 
 -- | This function should not be exported.
-nonExportedFn :: Number -> Number
+nonExportedFn :: String -> String
 nonExportedFn = id
 
 -- | Documentation for this type.
@@ -31,9 +33,12 @@ dataWithDocs = 3
 withoutTypeSig = "hello"
 
 -- | Testing searching for symbolic functions.
-(<++>) :: Number -> Number
+(<++>) :: Number -> Number -> Number
 (<++>) x y = if x > y then x + y else x * y
 
+-- | The member `thingy` should show up as forall a. (Thingy a) => a -> a
 class Thingy a where
-  -- | This should show up as forall a. (Thingy a) => a -> a
   thingy :: a -> a
+
+instance thingyNumber :: Thingy Number where
+  thingy = (+1)
